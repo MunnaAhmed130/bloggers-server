@@ -31,6 +31,25 @@ async function run() {
     try {
         // Connect the client to the server
         await client.connect();
+        const database = client.db("Blogger");
+        const blogCollection = database.collection("blogs");
+
+        app.get("/blogs", async (req, res) => {
+            const cursor = blogCollection.find({});
+            const blogs = await cursor.toArray();
+            res.json(blogs);
+            // console.log(req);
+        });
+
+        app.post("/blogs", async (req, res) => {
+            const blog = req.body;
+            const cursor = blogCollection.insertOne(blog);
+            const result = await cursor;
+            res.json(result);
+        });
+
+        app.delete("/blogs", async (req, res) => {});
+
         // Establish and verify connection
         // await client.db("admin").command({ ping: 1 });
         // console.log("Connected successfully to server");
