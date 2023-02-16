@@ -3,7 +3,7 @@ const express = require("express");
 const app = express();
 
 // mongodb
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 // cors
 var cors = require("cors");
@@ -48,7 +48,12 @@ async function run() {
             res.json(result);
         });
 
-        app.delete("/blogs", async (req, res) => {});
+        app.delete("/blogs", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId() };
+            const result = await blogCollection.deleteOne(query);
+            res.send(result);
+        });
 
         // Establish and verify connection
         // await client.db("admin").command({ ping: 1 });
